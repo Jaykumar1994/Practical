@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>
+		Practical Task
+	</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style type="text/css">
+		table, th, td {
+		  border: 1px solid black;
+		  border-collapse: collapse;
+		}
+	</style>
+</head>
+<body>
+	<label>Minimum Value</label>
+	<input type="number" id="minval" name="minval">
+	<label for="name" id="errmin" style="color: #F00;display: none;">Please Enter Mininum Value.</label>
+	<label for="name" id="errminvalmsg" style="color: #F00;display: none;">Please Enter More then 0.</label>
+	<label for="name" id="errminmsg" style="color: #F00;display: none;">Please Enter More then 0.</label>
+	<br/>
+	<label>Maximum Value</label>
+	<input type="number" id="maxval" name="maxval">
+	<label for="name" id="errmax" style="color: #F00;display: none;">Please Enter Maximum Value.</label>
+	<label for="name" id="errmaxvalmsg" style="color: #F00;display: none;">Please Enter More then minimum Value.</label>
+	<br/> 
+	<label>Commission Value</label>
+	<input type="number" id="comval" name="comval">
+	<label for="name" id="errcomval" style="color: #F00;display: none;">Please Enter More then 0.</label>
+	<br/>
+	<button id="addcom">Add Commission</button>
+	<br/>
+	<br/>
+
+	<table id="curcomstr">
+		<tr>
+			<th>Minimum Value</th>
+			<th>Maximum Value</th>
+			<th>Commission Value</th>
+		</tr>
+		
+	</table>
+	<br/>
+	<br/>
+	<hr>
+	<br/>
+	<label>Input Sales</label>
+	<input type="number" id="salesinp" name="salesinp">
+	<label for="name" id="errsal" style="color: #F00;display: none;">Please Enter More then 0.</label>
+	<button id="getcomval">Get Commission</button>
+	<br/>
+	<div id="dispcom"></div>
+</body>
+<script type="text/javascript">
+	$( window ).on( "load", function()
+	{
+		if (localStorage.getItem("commisionarr"))
+		{
+    		var carr = JSON.parse(localStorage.getItem("commisionarr"));
+    		carr.forEach(function (comrow)
+    		{
+    			var temprow='<tr><td>'+comrow[0]+'</td><td>'+comrow[1]+'</td><td>'+comrow[2]+'</td></tr>';
+    			$("#curcomstr").append(temprow);
+    		});
+    	}
+	});
+
+	$("#addcom").on("click",function()
+	{
+		var minval=$("#minval").val();
+		var maxval=$("#maxval").val();
+		var comval=$("#comval").val();
+		if(minval<=0)
+		{
+			$("#minval").val(0);
+			$("#minval").focus();
+			$("#errminvalmsg").show(0).delay(1500).hide(0);
+		}
+		else if(maxval<=0)
+		{
+			$("#maxval").val(0);
+			$("#maxval").focus();
+			$("#errmaxvalmsg").show(0).delay(1500).hide(0);
+		}
+		else if(maxval<=minval)
+		{
+			$("#minval").val(0);
+			$("#minval").focus();
+			$("#errminvalmsg").show(0).delay(1500).hide(0);
+		}
+		else
+		{
+			var comget = JSON.parse(localStorage.getItem("commisionarr"));
+			var flag=1;
+			if(comget)
+			{
+				comget.forEach(function(comrow)
+		    	{
+		    		if(comrow[0]>=minval)
+		    		{
+		    			flag=2;
+		    			$("#errminmsg").html('');
+	    				$("#errminmsg").html('Please Enter More then'+comrow[0]+'');
+	    				$("#errminmsg").show(0).delay(1500).hide(0);
+	    				$("#minval").val('0');
+	    				$("#minval").focus();
+	    				$("#maxval").val('0');
+		    		}
+		    	});
+
+		    	if(flag==1)
+		    	{
+		    		comget.forEach(function(comrow)
+			    	{
+			    		if(comrow[1]>=maxval)
+			    		{
+			    			flag=2;
+			    			$("#errmaxvalmsg").html('');
+		    				$("#errmaxvalmsg").html('Please Enter More then'+comrow[1]+'');
+		    				$("#errmaxvalmsg").show(0).delay(1500).hide(0);
+		    				$("#maxval").val('0');
+		    				$("#maxval").focus();
+			    		}
+			    	});
+		    	}
+		    }
+
+	    	if(flag==1)
+	    	{
+				if (localStorage.getItem("commisionarr"))
+				{
+					var carr = JSON.parse(localStorage.getItem("commisionarr"));
+					carr.push([minval,maxval,comval])
+				}
+				else
+				{
+					var carr=[];
+					var temparr=[minval,maxval,comval];
+					carr.push(temparr);
+				}
+				
+				localStorage.setItem("commisionarr",JSON.stringify(carr));
+				var temprow='<tr><td>'+minval+'</td><td>'+maxval+'</td><td>'+comval+'</td></tr>';
+		    	$("#curcomstr").append(temprow);
+		    	location.reload();
+		    }
+	    }
+	});
+
+	$("#minval").focusout(function()
+	{
+		var minval=$("#minval").val();
+		
+		if(minval<=0)
+		{
+			$("#errmin").show(0).delay(2500).hide(0);
+		}
+		else
+		{
+			var comdata = JSON.parse(localStorage.getItem("commisionarr"));
+
+			if(comdata)
+			{
+				comdata.forEach(function(comrow)
+	    		{
+	    			if(comrow[0]>=minval)
+	    			{
+	    				$("#errminmsg").html('');
+	    				$("#errminmsg").html('Please Enter More then'+comrow[0]+'');
+	    				$("#errminmsg").show(0).delay(1500).hide(0);
+	    				$("#minval").val('0');
+	    				$("#minval").focus();
+	    				$("#maxval").val('0');
+	    			}
+	    		});
+			}
+		}
+	});
+
+	$("#maxval").focusout(function()
+	{
+		var maxval=$("#maxval").val();
+		var minval=$("#minval").val();
+		
+		if(minval<=0)
+		{
+			$("#errmin").show(0).delay(2500).hide(0);
+		}
+		else if(maxval<=0)
+		{
+			$("#errmax").show(0).delay(2500).hide(0);
+		}
+		else if(maxval<=minval)
+		{
+			$("#maxval").val(0);
+			$("#maxval").focus();
+			$("#errmaxvalmsg").show(0).delay(2500).hide(0);
+		}
+		else
+		{
+			var comdata = JSON.parse(localStorage.getItem("commisionarr"));
+			if(comdata)
+			{
+				comdata.forEach(function(comrow)
+	    		{
+	    			if(comrow[1]>=maxval)
+	    			{
+	    				$("#errmaxvalmsg").html('');
+	    				$("#errmaxvalmsg").html('Please Enter More then'+comrow[1]+'');
+	    				$("#errmaxvalmsg").show(0).delay(1500).hide(0);
+	    				$("#maxval").val('0');
+	    				$("#maxval").focus();
+	    			}
+	    		});
+			}
+		}
+	});
+
+	$("#comval").focusout(function()
+	{
+		var comval=$("#comval").val();
+		
+		if(comval<=0)
+		{
+			$("#errcomval").show(0).delay(2500).hide(0);
+			$("#comval").focus();
+			$("#comval").val(0);
+		}
+	});
+
+	$("#getcomval").click(function ()
+	{
+		var salval=$("#salesinp").val();
+
+		if(salval<=0)
+		{
+			$("#salesinp").val('0');
+			$("#errsal").show(0).delay(2500).hide(0);
+		}
+		else
+		{
+			var comdata = JSON.parse(localStorage.getItem("commisionarr"));
+			if(comdata)
+			{
+				var amt=0;
+				var amt1=0;
+				var salval1=salval;
+				comdata.forEach(function(comrow)
+	    		{
+	    			var comval=comrow[2];
+	    			var maxval=comrow[1]
+	    			var minval=comrow[0]
+	    			
+	    			if(parseInt(salval)>0 && parseInt(salval1)>=parseInt(minval))
+	    			{
+    					var someval=parseInt(maxval)-parseInt(minval);
+	    				if(someval>salval)
+		    			{
+		    				someval=salval;
+		    			}
+		    			salval=parseInt(salval)-parseInt(someval);
+
+		    			if(salval1>=minval && salval1<=maxval)
+		    			{
+		    				someval=parseInt(salval1)-parseInt(minval);
+		    				salval=0;
+		    			}
+		    			amt1=parseInt(someval)*parseInt(comval);
+		    			amt=parseInt(amt)+parseInt(amt1);
+	    			}
+	    		});
+				$("#dispcom").html('');
+	    		$("#dispcom").html(amt);
+			}
+		}
+	});
+</script>
+</html>
