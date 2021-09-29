@@ -29,6 +29,7 @@
 	<label for="name" id="errcomval" style="color: #F00;display: none;">Please Enter More then 0.</label>
 	<br/>
 	<button id="addcom">Add Commission</button>
+	<button id="rescom">Reset Commission</button>
 	<br/>
 	<br/>
 
@@ -248,8 +249,8 @@
 				comdata.forEach(function(comrow)
 	    		{
 	    			var comval=comrow[2];
-	    			var maxval=comrow[1]
-	    			var minval=comrow[0]
+	    			var maxval=comrow[1];
+	    			var minval=comrow[0]-1;
 	    			
 	    			if(parseInt(salval)>0 && parseInt(salval1)>=parseInt(minval))
 	    			{
@@ -273,6 +274,12 @@
 	    		$("#dispcom").html(amt);
 			}
 		}
+	});
+
+	$("#rescom").click(function()
+	{
+		localStorage.clear();
+		location.reload();
 	});
 </script>
 </html>
