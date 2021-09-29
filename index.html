@@ -97,11 +97,11 @@
 			{
 				comget.forEach(function(comrow)
 		    	{
-		    		if(comrow[0]>=minval)
+		    		if(comrow[1]>=minval)
 		    		{
 		    			flag=2;
 		    			$("#errminmsg").html('');
-	    				$("#errminmsg").html('Please Enter More then'+comrow[0]+'');
+	    				$("#errminmsg").html('Please Enter More then'+comrow[1]+'');
 	    				$("#errminmsg").show(0).delay(1500).hide(0);
 	    				$("#minval").val('0');
 	    				$("#minval").focus();
@@ -164,10 +164,10 @@
 			{
 				comdata.forEach(function(comrow)
 	    		{
-	    			if(comrow[0]>=minval)
+	    			if(comrow[1]>=minval)
 	    			{
 	    				$("#errminmsg").html('');
-	    				$("#errminmsg").html('Please Enter More then'+comrow[0]+'');
+	    				$("#errminmsg").html('Please Enter More then'+comrow[1]+'');
 	    				$("#errminmsg").show(0).delay(1500).hide(0);
 	    				$("#minval").val('0');
 	    				$("#minval").focus();
