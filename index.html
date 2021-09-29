@@ -164,7 +164,7 @@
 			{
 				comdata.forEach(function(comrow)
 	    		{
-	    			if(comrow[1]>=minval)
+	    			if(parseInt(comrow[1])>=parseInt(minval))
 	    			{
 	    				$("#errminmsg").html('');
 	    				$("#errminmsg").html('Please Enter More then'+comrow[1]+'');
